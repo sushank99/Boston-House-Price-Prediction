@@ -1,0 +1,47 @@
+name: Deploy to Render
+
+on:
+  push:
+    branches:
+      - main  # Trigger the workflow on push to the main branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Cache Docker layers
+      uses: actions/cache@v3
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-docker-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-docker-
+
+    - name: Build and push Docker image
+      env:
+        REGISTRY: ghcr.io  # GitHub Container Registry
+        IMAGE_NAME: ${{ secrets.GITHUB_REPOSITORY }}  # Docker image name
+        IMAGE_TAG: latest
+      run: |
+        echo ${{ secrets.TOKENMY_GITHUB_TOKEN }} | docker login $REGISTRY -u ${{ github.actor }} --password-stdin
+        docker build -t $REGISTRY/$IMAGE_NAME:$IMAGE_TAG .
+        docker push $REGISTRY/$IMAGE_NAME:$IMAGE_TAG
+
+    - name: Deploy to Render
+      env:
+        RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}  # Render API key
+        IMAGE_NAME: ${{ secrets.MY_GITHUB_REPOSITORY }}  # Docker image name
+        IMAGE_TAG: latest
+      run: |
+        curl -X POST \
+          -H "Authorization: Bearer $RENDER_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"service_id": "srv-cr8mbtqj1k6c73f4uem0", "image": "ghcr.io/'$IMAGE_NAME':'$IMAGE_TAG'"}' \
+          https://api.render.com/v1/services/<your-render-service-id>/deploy
