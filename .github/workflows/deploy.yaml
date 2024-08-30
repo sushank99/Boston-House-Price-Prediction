@@ -27,21 +27,21 @@ jobs:
     - name: Build and push Docker image
       env:
         REGISTRY: ghcr.io  # GitHub Container Registry
-        IMAGE_NAME: ${{ secrets.GITHUB_REPOSITORY }}  # Docker image name
+        IMAGE_NAME: ${{ github.repository }}  # Docker image name
         IMAGE_TAG: latest
       run: |
-        echo ${{ secrets.TOKENMY_GITHUB_TOKEN }} | docker login $REGISTRY -u ${{ github.actor }} --password-stdin
+        echo ${{ secrets.DOCKER_PASSWORD }} | docker login $REGISTRY -u ${{ github.actor }} --password-stdin
         docker build -t $REGISTRY/$IMAGE_NAME:$IMAGE_TAG .
         docker push $REGISTRY/$IMAGE_NAME:$IMAGE_TAG
 
     - name: Deploy to Render
       env:
         RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}  # Render API key
-        IMAGE_NAME: ${{ secrets.MY_GITHUB_REPOSITORY }}  # Docker image name
+        IMAGE_NAME: ${{ github.repository }}  # Docker image name
         IMAGE_TAG: latest
       run: |
         curl -X POST \
           -H "Authorization: Bearer $RENDER_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"service_id": "srv-cr8mbtqj1k6c73f4uem0", "image": "ghcr.io/'$IMAGE_NAME':'$IMAGE_TAG'"}' \
-          https://api.render.com/v1/services/<your-render-service-id>/deploy
+          https://api.render.com/v1/services/srv-cr8mbtqj1k6c73f4uem0/deploy
