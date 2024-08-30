@@ -30,9 +30,10 @@ def predict():
     data = [float(x) for x in request.form.values()]
     final_input = scalar.transform(np.array(data).reshape(1,-1))
     print(final_input)
-    output = regmodel.predict(final_input)[0]
-    print(output)
-    return render_template('home.html',predicted_text = "The House Price Prediction is {}".format(output))
+    output = abs((regmodel.predict(final_input)[0])*1000)
+    output = "%.2f" % (abs(output))
+
+    return render_template('home.html',predicted_text = "The House Price Prediction is ${} ".format(output))
 
 if __name__=='__main__':
     app.run(debug=True)
