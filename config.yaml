@@ -1,0 +1,9 @@
+service:
+  web:
+    git:
+      url: https://github.com/sushank99/Boston-House-Price-Prediction.git
+    build_root: /app
+    docker:
+      file: Dockerfile
+    command: gunicorn --bind 0.0.0.0:5000 app:app
+  web_port: 5000
