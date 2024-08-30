@@ -1,3 +1,105 @@
-<h1>
-    welcome to home page
-</h1>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boston House Price Prediction</title>
+  <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Arimo" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Hind:300" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet" type="text/css">
+  <style>
+    body {
+      font-family: 'Arimo', sans-serif;
+      background-color: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background-color: white;
+      padding: 30px;
+      padding-top: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 400px;
+      max-height: 90vh;
+      overflow-y: auto;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Pacifico', cursive;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin: 5px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .btn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 18px;
+    }
+
+    .btn:hover {
+      background-color: #45a049;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Boston House Price Prediction</h1>
+
+    <!-- Main Input For Receiving Query to our ML -->
+    <form action="{{ url_for('predict') }}" method="post">
+      <input type="text" name="CRIM" placeholder="CRIM" required /><br>
+      <input type="text" name="ZN" placeholder="ZN" required /><br>
+      <input type="text" name="INDUS" placeholder="INDUS" required /><br>
+      <input type="text" name="CHAS" placeholder="CHAS" required /><br>
+      <input type="text" name="NOX" placeholder="NOX" required /><br>
+      <input type="text" name="RM" placeholder="RM" required /><br>
+      <input type="text" name="Age" placeholder="Age" required /><br>
+      <input type="text" name="DIS" placeholder="DIS" required /><br>
+      <input type="text" name="RAD" placeholder="RAD" required /><br>
+      <input type="text" name="TAX" placeholder="TAX" required /><br>
+      <input type="text" name="PTRATIO" placeholder="PTRATIO" required /><br>
+      <input type="text" name="B" placeholder="B" required /><br>
+      <input type="text" name="LSTAT" placeholder="LSTAT" required /><br>
+
+      <button type="submit" class="btn">Predict</button>
+    </form>
+
+    <!-- Display prediction result -->
+    <div class="result">
+      {{ predicted_text }}
+    </div>
+  </div>
+</body>
+
+</html>
