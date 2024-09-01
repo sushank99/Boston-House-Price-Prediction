@@ -2,7 +2,7 @@
 
 [ The Site is at 50 sec delay at initial wake  ]
 
-web app, click ->     [student-performace-outcome-prediction.com](https://boston-house-price-prediction-x88l.onrender.com).  
+web app, click ->     [Boston-House-Price-Evaluation.com](https://boston-house-price-prediction-x88l.onrender.com). 
 
 ## Software and requirments
 
