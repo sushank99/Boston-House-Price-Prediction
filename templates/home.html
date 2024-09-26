@@ -1,105 +1,263 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>House Price Prediction</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+        background-color: #f0f2f5;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>House Price Prediction</title>
-  <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Arimo" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Hind:300" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet" type="text/css">
-  <style>
-    body {
-      font-family: 'Arimo', sans-serif;
-      background-color: #f5f5f5;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
+      .container {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        max-width: 500px;
+        width: 100%;
+      }
 
-    .container {
-      background-color: white;
-      padding: 30px;
-      padding-top: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      width: 90%;
-      max-width: 400px;
-      max-height: 90vh;
-      overflow-y: auto;
-      text-align: center;
-    }
+      h1 {
+        font-size: 24px;
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 20px;
+        text-align: center;
+        border-bottom: 2px solid #eaeaea;
+        padding-bottom: 10px;
+      }
 
-    h1 {
-      font-family: 'Pacifico', cursive;
-      color: #333;
-      margin-bottom: 20px;
-    }
+      form {
+        display: flex;
+        flex-direction: column;
+      }
 
-    input[type="text"] {
-      width: calc(100% - 20px);
-      padding: 10px;
-      margin: 5px 0;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
+      label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #555;
+        margin-bottom: 5px;
+      }
 
-    .btn {
-      background-color: #4CAF50;
-      color: white;
-      padding: 10px;
-      margin-top: 15px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      width: 100%;
-      font-size: 18px;
-    }
+      input[type="text"] {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 16px;
+        background-color: #fafafa;
+        transition: border-color 0.3s;
+      }
 
-    .btn:hover {
-      background-color: #45a049;
-    }
+      input[type="text"]:focus {
+        border-color: #4caf50;
+        outline: none;
+      }
 
-    .result {
-      margin-top: 20px;
-      font-size: 18px;
-      color: #333;
-    }
-  </style>
-</head>
+      .btn {
+        background-color: #4caf50;
+        color: white;
+        padding: 12px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 18px;
+        margin-top: 10px;
+        transition: background-color 0.3s ease;
+      }
 
-<body>
-  <div class="container">
-    <h1>Boston House Price Prediction</h1>
+      .btn:hover {
+        background-color: #45a049;
+      }
 
-    <!-- Main Input For Receiving Query to our ML -->
-    <form action="{{ url_for('predict') }}" method="post">
-      <input type="text" name="CRIM" placeholder="Crime Rate (per capita)" required /><br>
-      <input type="text" name="ZN" placeholder="Residential Land Zoned (%)" required /><br>
-      <input type="text" name="INDUS" placeholder="Non-Retail Business Acres (%)" required /><br>
-      <input type="text" name="CHAS" placeholder="Charles River Proximity (1 = yes, 0 = no)" required /><br>
-      <input type="text" name="NOX" placeholder="Nitric Oxides Concentration (ppm)" required /><br>
-      <input type="text" name="RM" placeholder="Average Number of Rooms per Dwelling" required /><br>
-      <input type="text" name="Age" placeholder="Proportion of Houses Built Before 1940 (%)" required /><br>
-      <input type="text" name="DIS" placeholder="Distance to Employment Centers (weighted)" required /><br>
-      <input type="text" name="RAD" placeholder="Accessibility to Highways (index)" required /><br>
-      <input type="text" name="TAX" placeholder="Property Tax Rate per $10,000" required /><br>
-      <input type="text" name="PTRATIO" placeholder="Pupil-Teacher Ratio" required /><br>
-      <input type="text" name="B" placeholder="Proportion of Blacks by Town" required /><br>
-      <input type="text" name="LSTAT" placeholder="Lower Status Population (%)" required /><br>
+      .result {
+        margin-top: 20px;
+        font-size: 20px;
+        color: #333;
+        text-align: center;
+        font-weight: bold;
+      }
 
-      <button type="submit" class="btn">Predict</button>
-    </form>
+      .input-group {
+        margin-bottom: 15px;
+      }
 
-    <!-- Display prediction result -->
-    <div class="result">
-      {{ predicted_text }}
+      @media screen and (max-width: 600px) {
+        .container {
+          padding: 20px;
+        }
+
+        h1 {
+          font-size: 20px;
+        }
+
+        input[type="text"] {
+          padding: 10px;
+          font-size: 14px;
+        }
+
+        .btn {
+          padding: 10px;
+          font-size: 16px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>House Price Prediction</h1>
+
+      <form action="{{ url_for('predict') }}" method="post">
+        <div class="input-group">
+          <label for="CRIM">Crime Rate (per capita)</label>
+          <input
+            type="text"
+            id="CRIM"
+            name="CRIM"
+            placeholder="Enter crime rate"
+            required
+          />
+        </div>
+        <div class="input-group">
+          <label for="ZN">Residential Land Zoned (%)</label>
+          <input
+            type="text"
+            id="ZN"
+            name="ZN"
+            placeholder="Enter percentage of land zoned"
+            required
+          />
+        </div>
+        <div class="input-group">
+          <label for="INDUS">Non-Retail Business Acres (%)</label>
+          <input
+            type="text"
+            id="INDUS"
+            name="INDUS"
+            placeholder="Enter business acres percentage"
+            required
+          />
+        </div>
+        <div class="input-group">
+          <label for="CHAS">River in Locality (1 = yes, 0 = no)</label>
+          <input
+            type="text"
+            id="CHAS"
+            name="CHAS"
+            placeholder="Is near Charles River?"
+            required
+          />
+        </div>
+        <div class="input-group">
+          <label for="NOX">Average Air Pollution Level (ppm)</label>
+          <input
+            type="text"
+            id="NOX"
+            name="NOX"
+            placeholder="Enter NOX concentration"
+            required
+          />
+        </div>
+        <div class="input-group">
+          <label for="RM">Number of Rooms</label>
+          <input
+            type="text"
+            id="RM"
+            name="RM"
+            placeholder="Enter number of rooms"
+            required
+          />
+        </div>
+        <div class="input-group">
+          <label for="Age">percentage of Houses Built Before 1940 (%)</label>
+          <input
+            type="text"
+            id="Age"
+            name="Age"
+            placeholder="Enter % of older houses"
+            required
+          />
+        </div>
+        <div class="input-group">
+          <label for="DIS">Distance to Employment Centers (weighted)</label>
+          <input
+            type="text"
+            id="DIS"
+            name="DIS"
+            placeholder="Enter distance to centers"
+            required
+          />
+        </div>
+        <div class="input-group">
+          <label for="RAD">Accessibility to Highways (index)</label>
+          <input
+            type="text"
+            id="RAD"
+            name="RAD"
+            placeholder="Enter highway accessibility"
+            required
+          />
+        </div>
+        <div class="input-group">
+          <label for="TAX">Property Tax Rate per $10,000</label>
+          <input
+            type="text"
+            id="TAX"
+            name="TAX"
+            placeholder="Enter tax rate"
+            required
+          />
+        </div>
+        <div class="input-group">
+          <label for="PTRATIO">Student-Teacher Ratio</label>
+          <input
+            type="text"
+            id="PTRATIO"
+            name="PTRATIO"
+            placeholder="Enter pupil-teacher ratio"
+            required
+          />
+        </div>
+        <div class="input-group">
+          <label for="B">Proportion of Blacks by Town</label>
+          <input
+            type="text"
+            id="B"
+            name="B"
+            placeholder="Enter proportion of black residents"
+            required
+          />
+        </div>
+        <div class="input-group">
+          <label for="LSTAT">Lower Status Population (%)</label>
+          <input
+            type="text"
+            id="LSTAT"
+            name="LSTAT"
+            placeholder="Enter percentage of lower status population"
+            required
+          />
+        </div>
+
+        <button type="submit" class="btn">Predict</button>
+      </form>
+
+      <div class="result">{{ predicted_text }}</div>
     </div>
-  </div>
-</body>
-
+  </body>
 </html>
